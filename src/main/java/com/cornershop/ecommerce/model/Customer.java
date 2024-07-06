@@ -8,8 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
-
 
 @Table(name = "customer")
 @Entity
@@ -28,4 +26,8 @@ public class Customer {
     private String lastName;
 
     private Address address;
+
+    private String password;
+
+    private String roles;
 }
