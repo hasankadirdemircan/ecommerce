@@ -56,14 +56,16 @@ public class ProductController {
 
     @PutMapping("active/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Boolean> activeProduct(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(productService.activeOrDeActiveProduct(id, true), HttpStatus.OK);
+    public ResponseEntity<Void> activeProduct(@PathVariable("id") Long id) {
+        productService.activeOrDeActiveProduct(id, true);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("deActive/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Boolean> deActiveProduct(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(productService.activeOrDeActiveProduct(id, false), HttpStatus.OK);
+    public ResponseEntity<Void> deActiveProduct(@PathVariable("id") Long id) {
+        productService.activeOrDeActiveProduct(id, false);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

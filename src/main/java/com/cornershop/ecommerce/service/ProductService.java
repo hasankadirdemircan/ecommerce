@@ -35,7 +35,7 @@ public class ProductService {
     }
 
     public Product getProduct(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product Not Found id : " + id));
+        return productRepository.getActiveProductById(id).orElseThrow(() -> new ProductNotFoundException("Product Not Found id : " + id));
     }
 
     private String saveFile(MultipartFile file, String productName) {
@@ -53,8 +53,8 @@ public class ProductService {
         return filePath.toString();
     }
 
-    public boolean activeOrDeActiveProduct(Long id, boolean isActive) {
-        return productRepository.updateProductActive(isActive, id);
+    public void activeOrDeActiveProduct(Long id, boolean isActive) {
+        productRepository.updateProductActive(isActive, id);
     }
 
     public void deleteProduct(Long id) {
@@ -62,6 +62,6 @@ public class ProductService {
     }
 
     public List<Product> getAllProductList() {
-       return productRepository.findAll();
+       return productRepository.getAllActiveProductList();
     }
 }
