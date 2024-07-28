@@ -49,7 +49,7 @@ public class ProductController {
     @PutMapping(value = "/update", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Product> updateProduct(@RequestPart(value = "file", required = false) MultipartFile file,
-                                                 @ModelAttribute Product product) {
+                                                 @RequestPart("product") Product product) {
 
         return new ResponseEntity<>(productService.createProduct(file, product), HttpStatus.OK);
     }
