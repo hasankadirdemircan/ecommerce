@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -48,5 +47,10 @@ public class CategoryController {
     @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<Category>> getAllCategoryList() {
         return new ResponseEntity<>(categoryService.getAllCategoryList(), HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
+        return new ResponseEntity<>(categoryService.updateCategory(category), HttpStatus.OK);
     }
 }

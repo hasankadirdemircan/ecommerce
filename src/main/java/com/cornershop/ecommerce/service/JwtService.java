@@ -1,16 +1,12 @@
 package com.cornershop.ecommerce.service;
 
-import static org.springframework.security.config.Elements.JWT;
-
 import com.cornershop.ecommerce.dto.LoginDto;
 import com.cornershop.ecommerce.model.Customer;
 import com.cornershop.ecommerce.repository.CustomerRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +63,7 @@ public class JwtService {
                 .claims(claims)
                 .subject(name)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
                 .signWith(getSignKEy())
                 .compact();
     }
