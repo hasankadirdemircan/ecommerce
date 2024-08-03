@@ -7,11 +7,17 @@ import com.cornershop.ecommerce.model.Order;
 import com.cornershop.ecommerce.model.Product;
 import com.cornershop.ecommerce.repository.OrderRepository;
 import com.cornershop.ecommerce.repository.ProductRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +29,12 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String emailFrom;
 
     private void productUnitStockCheck(List<OrderProductInfo> orderProductInfoList) {
         orderProductInfoList.forEach(productInfo -> {
@@ -59,7 +71,23 @@ public class OrderService {
             productRepository.save(product);
         });
 
-        //TODO: mail at
+        sendMail();
         return true;
+    }
+
+    public void sendMail() {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        try {
+            helper.setFrom(emailFrom, "CornerShop");
+            helper.setTo("x");
+            helper.setSubject("Your Order is in progress");
+            String content = "<p>Hello,</p><p>This is a test email sent from Spring Boot.</p>";
+
+            helper.setText(content, true);
+            mailSender.send(message);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
