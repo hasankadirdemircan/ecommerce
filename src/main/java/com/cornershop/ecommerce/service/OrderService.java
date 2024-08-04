@@ -15,6 +15,7 @@ import jakarta.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,8 @@ public class OrderService {
     @Value("${spring.mail.username}")
     private String emailFrom;
 
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
     private void productUnitStockCheck(List<OrderProductInfo> orderProductInfoList) {
         orderProductInfoList.forEach(productInfo -> {
             Product product = productRepository.findById(productInfo.getProductId())
@@ -68,7 +71,8 @@ public class OrderService {
             order.setQuantity(orderRequestInfo.getQuantity());
             order.setProductId(orderRequestInfo.getProductId());
             order.setCustomerId(orderRequest.getCustomerId());
-            order.setPurchaseDate(LocalDate.now());
+            order.setPurchaseDate(LocalDateTime.parse(formatter.format(LocalDateTime.now()), formatter));
+
             order.setPrice(product.getPrice());
             if(product.getUnitsInStock() - orderRequestInfo.getQuantity() == 0) {
                 product.setActive(false);
