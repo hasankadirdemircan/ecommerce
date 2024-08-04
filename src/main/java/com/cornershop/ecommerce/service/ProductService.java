@@ -3,9 +3,11 @@ package com.cornershop.ecommerce.service;
 import com.cornershop.ecommerce.exception.ProductNotFoundException;
 import com.cornershop.ecommerce.model.Product;
 import com.cornershop.ecommerce.repository.ProductRepository;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
@@ -63,7 +65,12 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-        //TODO: delete image in path as well
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id +" product is not found"));
+        try {
+            Files.delete(Paths.get(product.getImage()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         productRepository.deleteById(id);
     }
 
