@@ -3,7 +3,6 @@ package com.cornershop.ecommerce.repository;
 import com.cornershop.ecommerce.model.Product;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,9 +22,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p")
     List<Product> getAllProductList();
-
-    @Query("SELECT p FROM Product p WHERE p.id =:id")
-    Optional<Product> getProductById(@Param("id") Long id);
 
     @Query("SELECT COUNT(p) FROM Product p WHERE p.categoryId = :categoryId")
     Long getProductCountOfCategoryId(@Param("categoryId") Long categoryId);
