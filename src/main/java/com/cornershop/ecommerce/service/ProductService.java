@@ -29,7 +29,7 @@ public class ProductService {
             String imagePath = saveFile(file, product.getName());
             product.setImage(imagePath);
         }else {
-            Product existProduct = productRepository.findById(product.getId()).orElseThrow(() -> new ProductNotFoundException("product not found id :" + product.getId()));
+            Product existProduct = productRepository.findById(product.getId()).orElseThrow(() -> new ProductNotFoundException("product not found id : " + product.getId()));
             product.setImage(existProduct.getImage());
         }
 
@@ -41,7 +41,7 @@ public class ProductService {
     }
 
     public Product getProduct(Long id) {
-        return productRepository.getProductById(id).orElseThrow(() -> new ProductNotFoundException("Product Not Found id : " + id));
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product Not Found id : " + id));
     }
 
     private String saveFile(MultipartFile file, String productName) {

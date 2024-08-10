@@ -79,7 +79,7 @@ class CategoryServiceTest {
 
         when(productRepository.getProductCountOfCategoryId(categoryId)).thenReturn(0L);
 
-        //To test void method, use doNothing because it doesn't return any data.
+        //To test void method, use doNothing because void method doesn't return any data.
         Mockito.doNothing().when(categoryRepository).deleteById(categoryId);
 
         categoryService.deleteCategory(categoryId);
