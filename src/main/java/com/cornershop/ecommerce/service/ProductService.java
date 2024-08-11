@@ -3,7 +3,6 @@ package com.cornershop.ecommerce.service;
 import com.cornershop.ecommerce.exception.ProductNotFoundException;
 import com.cornershop.ecommerce.model.Product;
 import com.cornershop.ecommerce.repository.ProductRepository;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -69,7 +68,7 @@ public class ProductService {
         try {
             Files.delete(Paths.get(product.getImage()));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("IO exception while deleting image of " + product.getName());
         }
         productRepository.deleteById(id);
     }

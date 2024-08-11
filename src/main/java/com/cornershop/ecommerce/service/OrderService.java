@@ -48,7 +48,7 @@ public class OrderService {
     private void productUnitStockCheck(List<OrderProductInfo> orderProductInfoList) {
         orderProductInfoList.forEach(productInfo -> {
             Product product = productRepository.findById(productInfo.getProductId())
-                    .orElseThrow(() -> new ProductNotFoundException("product not found id :" + productInfo.getProductId()));
+                    .orElseThrow(() -> new ProductNotFoundException("product not found id : " + productInfo.getProductId()));
 
             if(product.getUnitsInStock() - productInfo.getQuantity() < 0) {
                 log.error("the product stock insufficient id : " + productInfo.getProductId());

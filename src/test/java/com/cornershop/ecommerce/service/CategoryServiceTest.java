@@ -144,5 +144,19 @@ class CategoryServiceTest {
         verify(categoryRepository, times(1)).findAll();
     }
     
+    @Test
+    void updateCategory_successful() {
+        //given
+        Category category = categoryDOFactory.getCategoryWithId(1L);
 
+        //when
+        when(categoryRepository.save(category)).thenReturn(category);
+
+        //calling
+        Category response = categoryService.updateCategory(category);
+
+        //assert
+        assertEquals(category.getName(), response.getName());
+        verify(categoryRepository, times(1)).save(category);
+    }
 }

@@ -45,15 +45,16 @@ public class JwtService {
 
     public LoginDto generateToken(Authentication authentication) {
         LoginDto loginDto = new LoginDto();
-        Optional<Customer> customerOptional = customerRepository.findByEmail(authentication.getName());
+        String authenticationName = authentication.getName();
+        Optional<Customer> customerOptional = customerRepository.findByEmail(authenticationName);
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("authorities", authentication.getAuthorities());
-        claims.put("name", authentication.getName());
+        claims.put("name", authenticationName);
         if(customerOptional.isPresent()) {
             loginDto.setCustomerId(customerOptional.get().getId());
         }
-        loginDto.setToken(createToken(claims, authentication.getName()));
+        loginDto.setToken(createToken(claims, authenticationName));
 
         return loginDto;
     }
