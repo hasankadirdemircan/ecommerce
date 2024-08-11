@@ -2,7 +2,7 @@ package com.cornershop.ecommerce.helper;
 
 import com.cornershop.ecommerce.model.Product;
 
-public class ProductDoFactory {
+public class ProductDOFactory {
 
     public Product getProductWithId(Long productId) {
         Product product = new Product();
