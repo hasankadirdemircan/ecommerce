@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.cornershop.ecommerce.dto.OrderProductInfo;
 import com.cornershop.ecommerce.dto.OrderRequest;
-import com.cornershop.ecommerce.helper.ProductDoFactory;
+import com.cornershop.ecommerce.helper.ProductDOFactory;
 import com.cornershop.ecommerce.model.Customer;
 import com.cornershop.ecommerce.repository.CustomerRepository;
 import com.cornershop.ecommerce.repository.OrderRepository;
@@ -53,13 +53,13 @@ public class OrderServiceTest {
 
     @Mock
     private Environment environment;
-    private ProductDoFactory productDoFactory;
+    private ProductDOFactory productDoFactory;
 
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        this.productDoFactory = new ProductDoFactory();
+        this.productDoFactory = new ProductDOFactory();
 
     }
 

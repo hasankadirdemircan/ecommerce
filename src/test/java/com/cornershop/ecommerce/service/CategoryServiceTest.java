@@ -7,9 +7,12 @@ import static org.mockito.Mockito.when;
 
 import com.cornershop.ecommerce.exception.CategoryDeleteException;
 import com.cornershop.ecommerce.exception.CategoryDuplicateException;
+import com.cornershop.ecommerce.exception.CategoryNotFoundException;
+import com.cornershop.ecommerce.helper.CategoryDOFactory;
 import com.cornershop.ecommerce.model.Category;
 import com.cornershop.ecommerce.repository.CategoryRepository;
 import com.cornershop.ecommerce.repository.ProductRepository;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,18 +33,18 @@ class CategoryServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+    private CategoryDOFactory categoryDOFactory;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        this.categoryDOFactory = new CategoryDOFactory();
     }
     @Test
-    void createCategory_successfull() {
-        Category category = new Category();
-        category.setName("TEST_CATEGORY");
+    void createCategory_successful() {
+        Category category = categoryDOFactory.getCategoryWithoutId();
 
-        Category savedCategory = new Category();
-        savedCategory.setName(category.getName());
-        savedCategory.setId(1L);
+        Category savedCategory = categoryDOFactory.getCategoryWithId(1L);
 
         when(categoryRepository.findCategoryByName(category.getName())).thenReturn(Optional.empty());
         when(categoryRepository.save(category)).thenReturn(savedCategory);
@@ -55,12 +58,9 @@ class CategoryServiceTest {
 
     @Test
     void createCategory_fail() {
-        Category category = new Category();
-        category.setName("TEST_CATEGORY");
+        Category category = categoryDOFactory.getCategoryWithoutId();
 
-        Category savedCategory = new Category();
-        savedCategory.setName(category.getName());
-        savedCategory.setId(1L);
+        Category savedCategory = categoryDOFactory.getCategoryWithId(1L);
 
         when(categoryRepository.findCategoryByName(category.getName())).thenReturn(Optional.ofNullable(savedCategory));
 
@@ -102,5 +102,47 @@ class CategoryServiceTest {
         verify(categoryRepository, times(0)).deleteById(categoryId);
     }
 
-    //TODO: CategoryService için kalan methodların testini yaz.
+    @Test
+    void getCategory_successful() {
+        Long categoryId = 1L;
+        Category category = categoryDOFactory.getCategoryWithId(categoryId);
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+
+        Category response = categoryService.getCategory(categoryId);
+
+        assertEquals(categoryId, response.getId());
+        assertEquals(category.getName(), response.getName());
+        verify(categoryRepository, times(1)).findById(categoryId);
+    }
+
+    @Test
+    void getCategory_fail() {
+        Long categoryId = 1L;
+
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
+
+        CategoryNotFoundException thrown = Assertions.assertThrows(CategoryNotFoundException.class,
+                () -> categoryService.getCategory(categoryId));
+
+        assertEquals("Category not found id : 1", thrown.getMessage());
+        verify(categoryRepository, times(1)).findById(categoryId);
+    }
+
+    @Test
+    void getAllCategoryList_successful() {
+        List<Category> categoryList = categoryDOFactory.getCategoryListWithId();
+
+        when(categoryRepository.findAll()).thenReturn(categoryList);
+
+        List<Category> response = categoryService.getAllCategoryList();
+
+        assertEquals(categoryList.size(), response.size());
+        assertEquals(categoryList.get(0).getName(), response.get(0).getName());
+        assertEquals(categoryList.get(0).getId(), response.get(0).getId());
+        assertEquals(categoryList.get(2).getName(), response.get(2).getName());
+        assertEquals(categoryList.get(2).getId(), response.get(2).getId());
+        verify(categoryRepository, times(1)).findAll();
+    }
+    
+
 }
